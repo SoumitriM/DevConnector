@@ -1,10 +1,10 @@
-import { createSlice, createAsyncThunk, isRejectedWithValue } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, isRejectedWithValue, createAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import setAuthToken from "../utils/setAuthToken";
 
 export const register = createAsyncThunk('auth/register',
-  async (details, { rejectedWithValue }) => {
+  async (details, { rejectWithValue }) => {
     try {
       const config = {
         headers: {
@@ -16,14 +16,14 @@ export const register = createAsyncThunk('auth/register',
       return res.data;
     }
     catch (error) {
-      return rejectedWithValue('dd');
+      return rejectWithValue(error.response.data.message);
     }
 
   }
 )
 
 export const login = createAsyncThunk('auth/login',
-  async (details, { rejectedWithValue }) => {
+  async (details, { rejectWithValue }) => {
     try {
       const config = {
         headers: {
@@ -33,21 +33,30 @@ export const login = createAsyncThunk('auth/login',
       const res = await axios.post('http://localhost:9000/api/auth', details, config);
       await setAuthToken(res.data.token);
       const { data } = await axios.get('http://localhost:9000/api/auth/');
-      return {user: data, token: res.data.token};
+      return { user: data, token: res.data.token };
     }
     catch (error) {
-      return rejectedWithValue(error.response.message);
+      console.log(error.response.data);
+      return rejectWithValue(error.response.data.message);
     }
 
   }
 )
+export const resetError = createAction('resetError', () => {
+  return {
+    payload: {
+      errorMessage: "",
+      error: false
+    }
+  }
+})
 
 export const logout = createAsyncThunk('auth/logout', () => {
   localStorage.removeItem('token');
 })
 
 export const loadUser = createAsyncThunk('/user',
-  async () => {
+  async (_, { rejectWithValue }) => {
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
@@ -56,7 +65,7 @@ export const loadUser = createAsyncThunk('/user',
       return data;
     }
     catch (error) {
-      console.log(error.response.data.msg);
+      return rejectWithValue(error.response.data.message);
     }
   }
 )
@@ -68,7 +77,8 @@ const authSlice = createSlice({
     isAuthenticated: null,
     loading: true,
     user: null,
-    error: null
+    error: null,
+    errorMessage: "Something went wrong!"
   },
   reducers: {
   },
@@ -94,12 +104,15 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.loading = false;
       state.error = true;
+      state.errorMessage = action.payload;
+      state.user = null;
     });
     builder.addCase(login.rejected, (state, action) => {
       localStorage.removeItem('token');
       state.isAuthenticated = false;
       state.loading = false;
       state.error = true;
+      state.errorMessage = action.payload;
       state.user = null;
     });
     builder.addCase(login.pending, (state, action) => {
@@ -112,6 +125,14 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
       state.loading = true;
     });
+    builder.addCase(loadUser.rejected, (state, action) => {
+      localStorage.removeItem('token');
+      state.isAuthenticated = false;
+      state.loading = false;
+      state.error = true;
+      state.errorMessage = action.payload;
+      state.user = null;
+    });
     builder.addCase(loadUser.fulfilled, (state, action) => {
       state.user = action.payload;
       console.log('user fetched in reducr', action.payload)
@@ -122,6 +143,10 @@ const authSlice = createSlice({
       state.user = {}
       state.isAuthenticated = false;
       state.loading = false;
+    })
+    builder.addCase(resetError, (state, action) => {
+      state.error = action.payload.error;
+      state.errorMessage = action.payload.message;
     })
   }
 });

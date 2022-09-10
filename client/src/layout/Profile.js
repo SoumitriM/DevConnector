@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserProfile } from "../slices/profileReducer";
 
 const Profile = () => {
-  const {profile} = useSelector((state) => state.profile);
   const [currUser, setCurrUser] = useState({
   });
 
@@ -15,7 +14,7 @@ const Profile = () => {
     <div className="profile-top bg-primary p-2">
       <img
         className="round-img my-1"
-        src={profile.user.avatar}
+        src={currUser.avatar}
         alt=""
       />
       <h1 className="large">{currUser.name}</h1>

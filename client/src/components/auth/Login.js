@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../slices/authReducer";
+import ErrorSnackbar from "../common/ErrorSnackbar";
+import { resetError } from "../../slices/authReducer";
 
 const Login = () => {
 
@@ -11,8 +13,12 @@ const Login = () => {
   });
 
   const navigate = useNavigate();
-  const {error, isAuthenticated} = useSelector((state) => state.user);
+  const {error, errorMessage, isAuthenticated} = useSelector((state) => state.user);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(resetError());
+  },[]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -33,9 +39,7 @@ const Login = () => {
   }
 
   return <div className="container">
-    {error && <div className="alert alert-danger">
-      {error}
-    </div>}
+    {error && <ErrorSnackbar message={errorMessage}/>}
     <h1 className="large text-primary">Sign In</h1>
     <p className="lead"><i className="fas fa-user"></i> Sign into Your Account</p>
     <form className="form" action="dashboard.html">

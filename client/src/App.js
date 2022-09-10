@@ -13,6 +13,7 @@ import CreateProfile from './layout/CreateProfile';
 import Dashboard from './layout/Dashboard';
 import PrivateRoute from './components/auth/routing/PrivateRoute';
 import AddExperience from './components/dashboard/AddExperience';
+import AddEducation from './components/dashboard/AddEducation';
 
 const App = () => {
 
@@ -40,6 +41,7 @@ const App = () => {
         <Route exact path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route exact path="/create-profile" element={<PrivateRoute><CreateProfile /></PrivateRoute>} />
         <Route exact path="/add-experience" element={<PrivateRoute><AddExperience /></PrivateRoute>} />
+        <Route exact path="/add-education" element={<PrivateRoute><AddEducation /></PrivateRoute>} />
       </Routes>
     </BrowserRouter>
   )

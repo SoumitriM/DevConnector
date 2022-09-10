@@ -2,15 +2,15 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { getUserProfile } from "../slices/profileReducer";
+import formatDate from "../utils/commonFunctions";
 
 const Dashboard = () => {
 
-  const { isAuthenticated } = useSelector(state => state.user);
   const { profile } = useSelector(state => state.profile);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log('dashboard profile', profile);
     dispatch(getUserProfile());
   }, []);
 
@@ -33,6 +33,7 @@ const Dashboard = () => {
     </div>
 
     <h2 className="my-2">Experience Credentials</h2>
+    <div>{profile.education[0].school}</div>
     <table className="table">
       <thead>
         <tr>
@@ -43,12 +44,12 @@ const Dashboard = () => {
         </tr>
       </thead>
       <tbody>
-        {profile.experience.map(item => (
-          <tr key="item.company">
+        {profile.experience && profile.experience.map(item => (
+          <tr key={item.company}>
             <td>{item.company}</td>
             <td className="hide-sm">{item.title}</td>
             <td className="hide-sm">
-              {item.from} - {item.current ? <span>Now</span> : item.to}
+            {formatDate(item.from)} - {item.current ? <span>Now</span> : formatDate(item.to)}
             </td>
             <td>
               <button className="btn btn-danger">
@@ -71,11 +72,11 @@ const Dashboard = () => {
         </tr>
       </thead>
       <tbody>
-        {profile.education.map(item => (
-          <tr>
+        {profile.education && profile.education.map(item => (
+          <tr key={item.company}>
             <td>{item.school}</td>
             <td className="hide-sm">{item.degree}</td>
-            <td className="hide-sm">{item.from.slice(0,10).replaceAll('-','/')} - {item.now? <span>Now</span> : item.to.slice(0,10).replaceAll('-','/')}</td>
+            <td className="hide-sm">{formatDate(item.from)} - {item.current ? <span>Now</span> : formatDate(item.to)}</td>
             <td />
             <td>
               <button className="btn btn-danger">

@@ -284,6 +284,13 @@ img {
   color: #888;
 }
 
+.form-alert-red {
+  display: block;
+  margin-top: 0.3rem;
+  color: red;
+}
+
+
 .form input[type='text'],
 .form input[type='email'],
 .form input[type='password'],

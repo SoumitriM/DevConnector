@@ -17,33 +17,42 @@ export const getUserProfile = createAsyncThunk('/profile/me',
   }
 )
 
-export const addUserEducation = createAsyncThunk('/profile/education',
-  async () => {
-    if (localStorage.token) {
-      setAuthToken(localStorage.token);
+export const addUserEducation = createAsyncThunk('profile/add-education',
+async (details) => {
+  try {
+    console.log('inside create profile education reducer');
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
     }
-    try {
-      const { data } = await axios.get('http://localhost:9000/api/profile/education');
-      return data;
-    }
-    catch (error) {
-      console.log(error.response.data.msg);
-    }
+    const res = await axios.put('http://localhost:9000/api/profile/education', details, config);
+    return res.data;
   }
+  catch (error) {
+    console.log('something')
+  }
+
+}
 )
 
-export const addUserExperience = createAsyncThunk('/profile/experience',
-  async () => {
-    if (localStorage.token) {
-      setAuthToken(localStorage.token);
-    }
+export const addUserExperience = createAsyncThunk('profile/add-experience',
+  async (details) => {
     try {
-      const { data } = await axios.get('http://localhost:9000/api/profile/experience');
-      return data;
+      console.log('inside create profile experience reducer');
+      const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+      const res = await axios.put('http://localhost:9000/api/profile/experience', details, config);
+      console.log(res.data);
+      return res.data;
     }
     catch (error) {
-      console.log(error.response.data.msg);
+      console.log(error.response.m);
     }
+
   }
 )
 

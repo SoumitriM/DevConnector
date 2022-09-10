@@ -13,7 +13,8 @@ const { check, validationResult } = require('express-validator');
 // router.get('/', (req, res) => res.send('User route'));
 const error = {
   message: "Name is required",
-  email: "Email is invalid"
+  email: "Please provide a valid email",
+  password: "Please provide a valid password"
 }
 
 const User = require('../../models/User');
@@ -30,13 +31,13 @@ router.post('/',
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({message: errors.array()[0].msg});
     }
     const { name, email, password } = req.body;
     try {
       let user = await User.findOne({ email: email });
       if (user) {
-        return res.status(400).json({msg: 'User already exists'});
+        return res.status(400).json({message: 'User already exists'});
       }
       const avatar = gravatar.url(email, {
         s: '200',
@@ -70,7 +71,7 @@ router.post('/',
       );
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server Error!');
+      res.status(500).json({ message: 'Server Error!' });
     }
   });
 
