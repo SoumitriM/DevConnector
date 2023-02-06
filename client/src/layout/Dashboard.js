@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { getUserProfile } from "../slices/profileReducer";
+import { getUserProfile, removeEducation, removeExperience } from "../slices/profileReducer";
 import formatDate from "../utils/commonFunctions";
 
 const Dashboard = () => {
@@ -14,8 +14,16 @@ const Dashboard = () => {
     dispatch(getUserProfile());
   }, []);
 
+  const handleEducationDelete = (id) => {
+    dispatch(removeEducation(id));
+  }
+
+  const handleExperienceDelete = (id) => {
+    dispatch(removeExperience(id));
+  }
+
   if (!profile) return <div className="container">Create Profile
-    <Link to="/create-profile" href="edit-profile.html" className="btn btn-light"
+    <Link to="/edit-profile" href="edit-profile.html" className="btn btn-light"
     ><i className="fas fa-user-circle text-primary"></i> Create Profile</Link>
   </div>;
   else return <div className="container">
@@ -24,7 +32,7 @@ const Dashboard = () => {
     </h1>
     <p className="lead"><i className="fas fa-user"></i> Welcome {profile.user.name}</p>
     <div className="dash-buttons">
-      <Link to="/create-profile" href="edit-profile.html" className="btn btn-light"
+      <Link to="/edit-profile" href="edit-profile.html" className="btn btn-light"
       ><i className="fas fa-user-circle text-primary"></i> Edit Profile</Link>
       <Link to="/add-experience" className="btn btn-light"
       ><i className="fab fa-black-tie text-primary"></i> Add Experience</Link>
@@ -33,7 +41,7 @@ const Dashboard = () => {
     </div>
 
     <h2 className="my-2">Experience Credentials</h2>
-    <div>{profile.education[0].school}</div>
+    {/* <div>{profile.education[0].school}</div> */}
     <table className="table">
       <thead>
         <tr>
@@ -52,7 +60,7 @@ const Dashboard = () => {
             {formatDate(item.from)} - {item.current ? <span>Now</span> : formatDate(item.to)}
             </td>
             <td>
-              <button className="btn btn-danger">
+              <button className="btn btn-danger" onClick={() => handleExperienceDelete(item._id)}>
                 Delete
               </button>
             </td>
@@ -79,7 +87,7 @@ const Dashboard = () => {
             <td className="hide-sm">{formatDate(item.from)} - {item.current ? <span>Now</span> : formatDate(item.to)}</td>
             <td />
             <td>
-              <button className="btn btn-danger">
+              <button className="btn btn-danger" onClick={() => handleEducationDelete(item._id)}>
                 Delete
               </button>
             </td>

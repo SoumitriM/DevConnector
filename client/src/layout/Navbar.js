@@ -13,7 +13,10 @@ const Navbar = () => {
   return <div>
     <nav className="navbar bg-dark">
       <h1>
+      {!isAuthenticated ? (
         <Link to="/"><i className="fas fa-code"></i> DevConnector</Link>
+      ) : 
+      <Link to="/dashboard"><i className="fas fa-code"></i> DevConnector</Link>}
       </h1>
       {!isAuthenticated ? (
         <ul>
@@ -22,7 +25,10 @@ const Navbar = () => {
           <li><Link to="/login">Login</Link></li>
         </ul>
       ) :
-        <ul><li onClick={handleLogOut}><a href="#">Logout</a></li></ul>}
+        <ul>
+          <li><Link to="/profiles">Developers</Link></li>
+          <li onClick={handleLogOut}><a href="#">Logout</a></li>
+          </ul>}
     </nav>
   </div>
 };

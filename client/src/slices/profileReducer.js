@@ -2,6 +2,30 @@ import { createSlice, createAsyncThunk, isRejectedWithValue } from "@reduxjs/too
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 
+
+export const getProfiles = createAsyncThunk('/profiles',
+  async (id) => {
+    try {
+      const { data } = await axios.get('http://localhost:9000/api/profile/');
+      return data;
+    } catch (error) {
+      console.log(error.response.data.msg);
+    }
+  }
+)
+
+export const getProfile = createAsyncThunk('/profile/user/id',
+  async (id) => {
+    try {
+      console.log('hereeee');
+      const { data } = await axios.get(`http://localhost:9000/api/profile/user/${id}`)
+      return data[0];
+    } catch (error) {
+      console.log(error.response.data.msg);
+    }
+  }
+)
+
 export const getUserProfile = createAsyncThunk('/profile/me',
   async () => {
     if (localStorage.token) {
@@ -17,23 +41,53 @@ export const getUserProfile = createAsyncThunk('/profile/me',
   }
 )
 
-export const addUserEducation = createAsyncThunk('profile/add-education',
-async (details) => {
-  try {
-    console.log('inside create profile education reducer');
-    const config = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
+export const removeEducation = createAsyncThunk('/education/delete',
+  async (id) => {
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
     }
-    const res = await axios.put('http://localhost:9000/api/profile/education', details, config);
-    return res.data;
+    try {
+      const { data } = await axios.delete(`http://localhost:9000/api/profile/education/${id}`);
+      return data;
+    }
+    catch (error) {
+      console.log(error.response.data.msg);
+    }
   }
-  catch (error) {
-    console.log('something')
-  }
+);
 
-}
+export const removeExperience = createAsyncThunk('/experience/delete',
+  async (id) => {
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+    }
+    try {
+      const { data } = await axios.delete(`http://localhost:9000/api/profile/experience/${id}`);
+      return data;
+    }
+    catch (error) {
+      console.log(error.response.data.msg);
+    }
+  }
+);
+
+export const addUserEducation = createAsyncThunk('profile/add-education',
+  async (details) => {
+    try {
+      console.log('inside create profile education reducer');
+      const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+      const res = await axios.put('http://localhost:9000/api/profile/education', details, config);
+      return res.data;
+    }
+    catch (error) {
+      console.log('something')
+    }
+
+  }
 )
 
 export const addUserExperience = createAsyncThunk('profile/add-experience',
@@ -78,12 +132,22 @@ export const createUserProfile = createAsyncThunk('profile/create-profile',
 export const profileSlice = createSlice({
   name: 'profile',
   initialState: {
+    profiles: [],
     profile: null,
+    devProfile: {},
     loading: null
   },
   reducers: {
   },
   extraReducers: (builder) => {
+    builder.addCase(getProfiles.fulfilled, (state, action) => {
+      state.profiles = action.payload;
+      state.loading = false;
+    })
+    builder.addCase(getProfile.fulfilled, (state, action) => {
+      state.devProfile = action.payload;
+      state.loading = false;
+    })
     builder.addCase(getUserProfile.fulfilled, (state, action) => {
       state.profile = action.payload;
       state.loading = false;
@@ -97,6 +161,14 @@ export const profileSlice = createSlice({
       state.loading = false;
     })
     builder.addCase(addUserExperience.fulfilled, (state, action) => {
+      state.profile = action.payload;
+      state.loading = false;
+    })
+    builder.addCase(removeEducation.fulfilled, (state, action) => {
+      state.profile = action.payload;
+      state.loading = false;
+    })
+    builder.addCase(removeExperience.fulfilled, (state, action) => {
       state.profile = action.payload;
       state.loading = false;
     })

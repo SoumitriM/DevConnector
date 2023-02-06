@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { createUserProfile } from "../slices/profileReducer";
 import { Link } from "react-router-dom";
 import { getUserProfile } from "../slices/profileReducer";
-const CreateProfile = () => {
+const EditProfile = () => {
 
   const dispatch = useDispatch();
   const [userDetails, setUserDetails] = useState({
@@ -46,7 +46,7 @@ const CreateProfile = () => {
 
   return <div className="container">
     <h1 className="large text-primary">
-      Create Your Profile
+      Edit Your Profile
     </h1>
     <p className="lead">
       <i className="fas fa-user"></i> Let's get some information to make your
@@ -148,4 +148,4 @@ const CreateProfile = () => {
   </div>
 };
 
-export default CreateProfile;
+export default EditProfile;
