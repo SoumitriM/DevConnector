@@ -60,7 +60,7 @@ router.post('/',
       };
       jwt.sign(
         payload,
-        config.get('jwtToken'),
+        process.env.JWT_TOKEN,
         {
           expiresIn: 360000000
         },

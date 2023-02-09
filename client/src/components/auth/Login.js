@@ -17,6 +17,7 @@ const Login = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log('here', process.env.JWT_TOKEN);
     dispatch(resetError());
   },[]);
 

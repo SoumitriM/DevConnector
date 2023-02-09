@@ -54,7 +54,7 @@ async (req, res) => {
     };
     jwt.sign(
       payload,
-      config.get('jwtToken'),
+      process.env.JWT_TOKEN,
       {
         expiresIn: 36000
       },
