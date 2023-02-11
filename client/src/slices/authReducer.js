@@ -11,7 +11,7 @@ export const register = createAsyncThunk('auth/register',
           'Content-Type': 'application/json'
         }
       }
-      const res = await axios.post('http://localhost:9000/api/users', details, config);
+      const res = await axios.post('https://dev-connector-mvyr.vercel.app//api/users', details, config);
       console.log(res)
       return res.data;
     }
@@ -30,9 +30,9 @@ export const login = createAsyncThunk('auth/login',
           'Content-Type': 'application/json'
         }
       }
-      const res = await axios.post('http://localhost:9000/api/auth', details, config);
+      const res = await axios.post('https://dev-connector-mvyr.vercel.app/api/auth', details, config);
       await setAuthToken(res.data.token);
-      const { data } = await axios.get('http://localhost:9000/api/auth/');
+      const { data } = await axios.get('https://dev-connector-mvyr.vercel.app//api/auth/');
       return { user: data, token: res.data.token };
     }
     catch (error) {
@@ -61,7 +61,7 @@ export const loadUser = createAsyncThunk('/user',
       setAuthToken(localStorage.token);
     }
     try {
-      const { data } = await axios.get('http://localhost:9000/api/auth/');
+      const { data } = await axios.get('https://dev-connector-mvyr.vercel.app/api/auth/');
       return data;
     }
     catch (error) {

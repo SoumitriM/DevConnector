@@ -6,7 +6,7 @@ import setAuthToken from "../utils/setAuthToken";
 export const getProfiles = createAsyncThunk('/profiles',
   async (id) => {
     try {
-      const { data } = await axios.get('http://localhost:9000/api/profile/');
+      const { data } = await axios.get('https://dev-connector-mvyr.vercel.app/api/profile/');
       return data;
     } catch (error) {
       console.log(error.response.data.msg);
@@ -18,7 +18,7 @@ export const getProfile = createAsyncThunk('/profile/user/id',
   async (id) => {
     try {
       console.log('hereeee');
-      const { data } = await axios.get(`http://localhost:9000/api/profile/user/${id}`)
+      const { data } = await axios.get(`https://dev-connector-mvyr.vercel.app/api/profile/user/${id}`)
       return data[0];
     } catch (error) {
       console.log(error.response.data.msg);
@@ -32,7 +32,7 @@ export const getUserProfile = createAsyncThunk('/profile/me',
       setAuthToken(localStorage.token);
     }
     try {
-      const { data } = await axios.get('http://localhost:9000/api/profile/me');
+      const { data } = await axios.get('https://dev-connector-mvyr.vercel.app/api/profile/me');
       return data;
     }
     catch (error) {
@@ -47,7 +47,7 @@ export const removeEducation = createAsyncThunk('/education/delete',
       setAuthToken(localStorage.token);
     }
     try {
-      const { data } = await axios.delete(`http://localhost:9000/api/profile/education/${id}`);
+      const { data } = await axios.delete(`https://dev-connector-mvyr.vercel.app/api/profile/education/${id}`);
       return data;
     }
     catch (error) {
@@ -62,7 +62,7 @@ export const removeExperience = createAsyncThunk('/experience/delete',
       setAuthToken(localStorage.token);
     }
     try {
-      const { data } = await axios.delete(`http://localhost:9000/api/profile/experience/${id}`);
+      const { data } = await axios.delete(`https://dev-connector-mvyr.vercel.app/api/profile/experience/${id}`);
       return data;
     }
     catch (error) {
@@ -80,7 +80,7 @@ export const addUserEducation = createAsyncThunk('profile/add-education',
           'Content-Type': 'application/json'
         }
       }
-      const res = await axios.put('http://localhost:9000/api/profile/education', details, config);
+      const res = await axios.put('https://dev-connector-mvyr.vercel.app/api/profile/education', details, config);
       return res.data;
     }
     catch (error) {
@@ -99,7 +99,7 @@ export const addUserExperience = createAsyncThunk('profile/add-experience',
           'Content-Type': 'application/json'
         }
       }
-      const res = await axios.put('http://localhost:9000/api/profile/experience', details, config);
+      const res = await axios.put('https://dev-connector-mvyr.vercel.app/api/profile/experience', details, config);
       console.log(res.data);
       return res.data;
     }
@@ -119,7 +119,7 @@ export const createUserProfile = createAsyncThunk('profile/create-profile',
           'Content-Type': 'application/json'
         }
       }
-      const res = await axios.post('http://localhost:9000/api/profile', details, config);
+      const res = await axios.post('https://dev-connector-mvyr.vercel.app/api/profile', details, config);
       return res.data;
     }
     catch (error) {
