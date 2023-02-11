@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const config = require('config');
-const db = config.get('mongoURI');
-// const db = process.env.MONGO_URI;
-// console.log('here', process.env.JWT_TOKEN);
+require("dotenv").config();
+// const db = config.get('mongoURI');
+const db = process.env.MONGO_URI;
+console.log('here-->', db);
 const connectDB = async () => {
   try {
     await mongoose.connect(db), {
